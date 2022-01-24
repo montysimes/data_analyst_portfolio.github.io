@@ -1,0 +1,182 @@
+<!DOCTYPE HTML>
+<!--
+	Editorial by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Data Analyst Portfolio - Retail Turnover</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+	</head>
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Main -->
+					<div id="main">
+						<div class="inner">
+
+							<!-- Header -->
+								<header id="header">
+									<a href="index.html" class="logo"><strong>Business Forecasting and Modelling</strong> Excel/Minitab/HES & WES Models</a>
+									<ul class="icons">
+										<li><a href="https://www.linkedin.com/in/montgomery-simes-639495200/" class="icon brands fa-linkedin"><span class="label">linkedin</span></a></li>
+										<li><a href="https://github.com/montysimes" class="icon brands fa-github"><span class="label">Github</span></a></li>
+									</ul>
+								</header>
+
+							<!-- Content -->
+								<section>
+									
+									<header class="main">
+										<h1>Retail Turnover Forecasting</h1>
+									
+								<ul class="actions">
+									<li><a href="https://github.com/montysimes/retail_turnover_forecasting" class="button">Excel Model</a></li>
+									<li><a href="https://www.abs.gov.au/statistics/industry/retail-and-wholesale-trade/retail-trade-australia/latest-release#data-download" class="button">Data</a></li>
+								</ul>
+							</header>
+
+									<h2>Attribution</h2>
+									<p>This report is based on original and seasonally adjusted data, collated by the ABS, for retail turnover by cafes, restaurants and takeaway food services in Australia from March 2011 to February 2021. The data is an estimate calculated from survey data collected by the monthly 'Retail Businesses Survey' which canvases 500 large businesses and 2700 smaller businesses (Australian Bureau of Statistics, 2021).</p>
+
+									<h2>Scope</h2>
+									<p>Two exponential smoothing models were used to generate the forecasts, Holts exponential smoothing (HES) and Winters exponential smoothing - Multiplicative (WES). Exponential smoothing methods consider a weighted average of past observations when predicting future values within a time series, with newer observations weighted more than older (Hyndman, 2008). The systematic components of the data dictate the appropriate model. HES is used for data with a trend component, WES is used for data with a trend and seasonal component.</p>
+
+									<h2>Application</h2>
+									<p>The following correlograms were used to identify the systematic components within the data set so that an appropriate forecasting model could be applied.</p>
+									<img src="images/retail_turnover_correlogram_1.jpg" alt="" />
+									<p>Correlogram 1.0</p>
+									<p>Correlogram 1.0 plots the ACF of the seasonally adjusted retail trade turnover estimates and shows the autocorrelation coefficient start off large and decrease gradually for each successive lag. This is typical of data with a trend component and as such the HES model should be applied. </p>
+									<img src="images/retail_turnover_correlogram_2.jpg" alt="" /> 
+									<p>Correlogram 2.0</p>
+									<p>Correlogram 2.0 plots the ACF of the original retail trade turnover estimates and shows both a trend and seasonal component and therefore the WES model should be applied. The trend component is evident by the declining of the autocorrelation coefficient after successive lags. The seasonal component is evident by the spikes at constant periods, in this case it is evident at lag 1, 12 and 24.</p>
+									<p> The HES model is comprised of three equations. These equations estimate the level and trend of the data and are weighted by the smoothing constants \(\alpha \) and \(\beta \). The equations are:
+										<li>Level: \(L_t=\alpha Y_t+(1-\alpha )(L_{t-1}+T_{t-1})\)</li>
+										<li>Trend: \(T_t=\beta(L_t-L_{t-1})+(1-\beta)(T_{t-1})\)</li>
+										<li>Forecast: \(F_{t+m}=L_t+mT_t\)</li> </p>
+									<p>The WES model is comprised of four equations which estimate the level, trend and seasonal components weighted by smoothing constants \(\alpha \), \(\beta \) and \(\gamma \). The equations are:
+										<li>Level: \(L_t=\alpha(\frac{Y_t}{S_{t-s}})+(1-\alpha)(L_{t-1}+T_{t-1})\)  </li>
+										<li>Trend: \(T_t=\beta(L_t-L_{t-1})+(1-\beta) T_{t-1}\) </li>
+										<li>Season: \(S_t=\gamma(\frac{Y_t}{L_t})+(1-\gamma)S_{t-s}\) </li>
+										<li>Forecast: \(\hat{Y}_{t+p}=(L_t+pT_t) S_{t-s+p}\) </li>
+									</p>
+
+									<h2>Analysis</h2>
+									<p>The following forecast was generated using the WES model.</p>
+									<img src="images/retail_turnover_WES_model.jpg" alt="WES Model" height="480" width="720" />
+									<p>The considered sample shows a consistent upwards linear trend. Also, a seasonal component is evident with spikes at the December period and lows at the February period. As the Seasonal component is relative to the level of the time series the seasonality is multiplicative. </p>
+									<p>The within-sample forecast follows the considered samples overall trend and the major spikes in seasonality. The within-sample forecast fits the observed data for later periods better than earlier ones.  The out-0f-sample forecast shows a projection of the past trend and seasonal components with the low point in February and high point in December. The forecast continues the multiplicative structure of the time series.</p>
+									<img src="images/retail_turnover_WES_model2.jpg" alt="WES Model" height="480" width="720" />
+									<p>The above graph shows the WES forecast and the beyond considered sample observations. The beyond considered sample has a different trend and the seasonal components while evident are more varied in magnitude. The data for this period is significantly different from that forecast using the WES model.</p>
+
+									<h2>Articulation of Issues</h2>
+									<img src="images/retail_turnover_WES_errors.jpg" alt="WES Model" height="350" width="550" />
+									<p>The scatter plot of the errors for the WES method shows a non-random distribution around zero indicating a level component within the errors. </p>
+									<img src="images/retail_turnover_WES_errors_ACF.jpg" alt="WES Model" />
+									<p>The correlogram of the errors shows a significant autocorrelation at lag one, reinforcing the presence of a level component unaccounted for by the model.</p>
+									<p>The MSE (mean squared error) for the WES model when \(\alpha \)=0.5, \(\beta \)=0.2 and \(\gamma \)=0.1 was 5656.11. When the model was optimized using the excel solver function the MSE was reduced to 3112.82 with \(\alpha \)=0.422, \(\beta \)=0.0 and \(\gamma \)=0.6. The WES model with these smoothing constants produces a more accurate model. </p>
+
+									<h2>Critique</h2>
+									<p>The COVID 19 pandemic resulted in the introduction of government regulations in March 2020 that “impacted the ability for businesses to trade as normal” (Australian Bureau of Statistics, 2021). This explains the significant reduction in retail turnover within this sector during early 2020. As the WES model does not account for such factors the forecasts for 2020 and 2021 are inaccurate. </p>
+									<p>Exponential smoothing models use components of historic data to project future values. The models do not account for real-world changes within the workplace (e.g., changes in legislation that effect business) and therefore may generate inaccurate forecasts.  For business forecasts to be effectively utilized to make decisions, the models assumptions and shortcomings need to be considered when evaluating the models results. </p>
+
+									<h2>Position</h2> 
+									<p>Considering the information presented the WES model projected a reasonable forecast for the expected retail turnover extrapolating past trends and multiplicative seasonal components from the sample data. Upon evaluation of the model it was found the level component had not been completely accounted for as such the application of alternate forecasting methods such as decomposition may prove to be more accurate.</p>
+									<p>The model proved to be inaccurate due to unforeseeable events which changed consumer behavior. It is important that future forecasts take into consideration the introduction/withdrawal of government stimulus which may affect future consumer behavior.  </p>
+
+									<h3>Reference</h3>
+									<p>AUSTRALIAN BUREAU OF STATISTICS. 2021. Retail Trade, Australia methodology [Online]. 
+									</br> Available: https://www.abs.gov.au/methodologies/retail-trade-australia-methodology/feb-2021 
+									</br>HANKE, J. E., WICHERN, D. & WICHERN, D. W. 2013. Business Forecasting, Harlow, Pearson Education UK.
+									</br>HYNDMAN, R. J. 2008. Forecasting with exponential smoothing : the state space approach, Berlin ;, Springer.
+										
+										</p>
+								</section>
+
+						</div>
+					</div>
+
+				<!-- Sidebar -->
+				<div id="sidebar">
+					<div class="inner">
+
+
+						<!-- Menu -->
+							<nav id="menu">
+								<header class="major">
+									<h2>Menu</h2>
+								</header>
+								<ul>
+									<li><a href="index.html">Homepage</a></li>
+									<li><a href="about.html">About Me</a></li>
+									<li>
+										<span class="opener">Data Analytics</span>
+										<ul>
+											<li><a href="Escooter Data Exploration.html"><strong>Chicago E-scooters </strong></br>Python/Data Exploration</a></li>
+											<li><a href="analysis_of_cycling_data.html"><strong>Cycling Data </strong></br>Python/Data Exploration</a></li>
+											<li><a href="sports_voucher_program_analysis.html"><strong>Sports Voucher Program </strong></br>Python/Data Exploration</a></li>
+											<li><a href="2022_01_12_Bellabeat_Case_Study.html"><strong>Bellabeat </strong></br>R/Data Exploration</a></li>
+										</ul>
+									</li>
+									<li>
+										<span class="opener">Data Science</span>
+										<ul>
+											<li><a href="telco_customer_churn.html"><strong>Telco Customer Churn </strong></br>Python/Logistic Regression</a></li>
+											<li><a href="Linear_Regression_Model.html"><strong>Chicago E-scooters </strong></br>Python/Linear Regression</a></li>
+										</ul>
+									</li>
+									<li>
+										<span class="opener">SQL & Relational Database</span>
+										<ul>
+											<li><a href="https://github.com/montysimes/remote_island_resort_database_implementation_project/blob/main/remote_island_resort_database_implementation_project.sql"><strong>Remote Island Resort Database Implementation</strong></br>SQL/mySQL</a></li>
+											<li><a href="https://github.com/montysimes/magic_ale_database_programming_and_implementation"><strong>Magic Ale Database Programming and Implementation</strong></br>SQL/mySQL/Triggers & Stored Programs</a></li>
+										</ul>
+									</li>
+									<li>
+										<span class="opener">Data Visualisation</span>
+										<ul>
+											<li><a href="Australia's_demographic_composition_by_country_of_birth.html"><strong>Australia's Demographic Composition by Country of Birth </strong></br>Tableau/Dashboard</a></li>
+										</ul>
+									</li>
+									<li>
+										<span class="opener">Business Forcasting</span>
+										<ul>
+											<li><a href="retail_turnover.html"><strong>Retail Turnover Forecasting</strong></br>Excel/Minitab/WES & HES models</a></li>
+										</ul>
+									</li>
+							</nav>
+							
+
+						<!-- Section -->
+							<section>
+								<header class="major">
+									<h2>Contact Me</h2>
+								</header>
+								<ul class="contact">
+									<li class="icon solid fa-envelope"><a href="#">montgomery.simes@students.mq.edu.au</a></li>
+								</ul>
+							</section>
+
+
+					</div>
+					</div>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+			<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+			<script type="text/javascript" id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"> </script>
+			
+
+	</body>
+</html>
